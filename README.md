@@ -4,7 +4,6 @@ The repo for my "unfuck twitter" project
 [Read the blogpost here](https://substack.com/@ceselder/p-177968908)
 
 <img src="example.gif" />
-![example](example.gif)
 
 ## Usage
 * Clone the repo
