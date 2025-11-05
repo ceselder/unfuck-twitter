@@ -46,7 +46,7 @@ async function scrapeTweets(bannedWords = [], deleteMode = false, openRouterKey)
     const tweetUrl = linkElement?.href || ""; // unique URL per tweet
     const id = tweetUrl ? tweetUrl.split("/").pop() : btoa(username + tweetText);
     
-    if (!seenTweets.includes(id))
+    if (!seenTweets.contains(id))
     {
       const verdict = await evaluateTweet(id, username, tweetText, bannedWords, openRouterKey);
       if (verdict.shouldDelete == true)
@@ -65,7 +65,7 @@ async function scrapeTweets(bannedWords = [], deleteMode = false, openRouterKey)
 function handleTweet(tweetId, verdict, deleteMode) {
   const tweet = Array.from(document.querySelectorAll('article[data-testid="tweet"]')).find(t => {
     const link = t.querySelector('a[href*="/status/"]');
-    return link && link.href.includes(tweetId);
+    return link && link.href.has(tweetId);
   });
 
   if (!tweet) {
