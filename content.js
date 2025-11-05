@@ -1,4 +1,5 @@
 async function callOpenRouter(openRouterKey, textPrompt, model) {
+  console.log("before shipping: ", openRouterKey)
   return new Promise((resolve) => {
     browser.runtime.sendMessage(
       { type: "OPENROUTER_QUERY", payload: {openRouterKey, textPrompt, model } },
@@ -10,7 +11,7 @@ async function callOpenRouter(openRouterKey, textPrompt, model) {
 async function evaluateTweet(id, username, tweetText, bannedWords = [], openRouterKey) {
   const textPrompt = `I am going to give you the json content of a tweet. \n
                     We're trying to filter out the worst of the twitter algorithm. \n
-                    The tweet is ${tweetText} by ${username}
+                    The tweet is "${tweetText}" by "${username}"
                     Here are the categories the user does not want to see:
                     ${bannedWords}
                     if it belongs to one of these categories, please answer with the name of the category
@@ -20,7 +21,13 @@ async function evaluateTweet(id, username, tweetText, bannedWords = [], openRout
     
   const LLMresponse = await callOpenRouter(openRouterKey, textPrompt, "google/gemini-2.0-flash-001")
   console.log(LLMresponse)
-  return {shouldDelete: false, reason: "na"}
+  const text = LLMresponse.data.choices[0].message.content.trim()
+  console.log(text)
+  if (text == "OK")
+  {
+   return {shouldDelete: false, reason: "na"}
+  }
+  return {shouldDelete: true, reason: text}
 }
 
 async function scrapeTweets(bannedWords = [], deleteMode = false, openRouterKey) {
