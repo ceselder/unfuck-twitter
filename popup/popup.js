@@ -1,5 +1,4 @@
 const button = document.getElementById("scrapeBtn");
-const output = document.getElementById("output");
 const bannedWordsInput = document.getElementById("bannedWordsInput"); // comma-separated
 const deleteModeCheckbox = document.getElementById("deleteCheckbox"); // checkbox
 const openRouterKeyInput = document.getElementById("openRouterKey");
@@ -29,7 +28,7 @@ button.addEventListener("click", async () => {
       deleteMode,
       openRouterKey
     }
+    
   });
-  output.textContent = JSON.stringify(response.tweets, null, 2);
 
 });
