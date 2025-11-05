@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "Unfuck Twitter",
+  "version": "1.0",
+  "description": "A browser extension to unfuck tiwtter",
+  "permissions": ["storage", "activeTab", "scripting"],
+    "host_permissions": [
+    "*://x.com/*",
+    "*://twitter.com/*"
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "48": "icons/icon.png"
+    }
+  },
+"background": { "scripts": ["background.js"], "persistent": true },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
