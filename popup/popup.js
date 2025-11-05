@@ -23,7 +23,6 @@ button.addEventListener("click", async () => {
   const openRouterKey = openRouterKeyInput.value;
 
   const tab = await getActiveTab();
-  console.log("resp")
   const response = await browser.tabs.sendMessage(tab.id, {
     type: "SCRAPE_TWEETS",
     payload: {
@@ -32,7 +31,6 @@ button.addEventListener("click", async () => {
       openRouterKey
     }
   });
-  console.log("respge", response)
   output.textContent = JSON.stringify(response.tweets, null, 2);
 
 });

@@ -37,7 +37,7 @@ async function scrapeTweets(bannedWords = [], deleteMode = false, openRouterKey)
     const tweetUrl = linkElement?.href || ""; // unique URL per tweet
     const id = tweetUrl ? tweetUrl.split("/").pop() : btoa(username + tweetText);
 
-    const verdict = await evaluateTweet(id, username, tweetText, bannedWords);
+    const verdict = await evaluateTweet(id, username, tweetText, bannedWords, openRouterKey);
 
     tweets.push({
       id,
@@ -91,7 +91,7 @@ function handleTweet(tweetId, verdict, deleteMode) {
 browser.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
   if (msg.type === "SCRAPE_TWEETS") {
     const { bannedWords = [], deleteMode = false, openRouterKey } = msg.payload || {};
-    console.log("bannedwords", bannedWords)
+    console.log("bannedwords", bannedWords, openRouterKey)
     const data = await scrapeTweets(bannedWords, deleteMode, openRouterKey); // pass bannedWords and deleteMode
 
     sendResponse({ tweets: data }); // sendResponse instead of return
