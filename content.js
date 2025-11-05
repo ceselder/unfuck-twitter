@@ -48,13 +48,13 @@ async function scrapeTweets(bannedWords = [], deleteMode = false, openRouterKey)
     
     if (!seenTweets.has(id))
     {
+      seenTweets.add(id);
       const verdict = await evaluateTweet(id, username, tweetText, bannedWords, openRouterKey);
       if (verdict.shouldDelete == true)
       {
         handleTweet(id, verdict, deleteMode)
       }
     }
-    seenTweets.add(id);
 
 
   }
@@ -100,6 +100,6 @@ browser.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
     autoScrapeInterval = setInterval(async () => {
       const { bannedWords = [], deleteMode = false, openRouterKey } = msg.payload || {};
       await scrapeTweets(bannedWords, deleteMode, openRouterKey); // pass bannedWords and deleteMode
-    }, 5000) //yes this is not the right way to do this, no I don't care
+    }, 1000) //yes this is not the right way to do this, no I don't care
   }
 });
