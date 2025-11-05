@@ -1,3 +1,5 @@
+let seenTweets = new Set()
+
 async function callOpenRouter(openRouterKey, textPrompt, model) {
   console.log("before shipping: ", openRouterKey)
   return new Promise((resolve) => {
@@ -43,20 +45,18 @@ async function scrapeTweets(bannedWords = [], deleteMode = false, openRouterKey)
     const username = userElement?.innerText || "";
     const tweetUrl = linkElement?.href || ""; // unique URL per tweet
     const id = tweetUrl ? tweetUrl.split("/").pop() : btoa(username + tweetText);
-
-    const verdict = await evaluateTweet(id, username, tweetText, bannedWords, openRouterKey);
-
-    tweets.push({
-      id,
-      username,
-      tweetText,
-      verdict
-    });
-
-    if (verdict.shouldDelete == true)
+    
+    if (!seenTweets.includes(id))
     {
-      handleTweet(id, verdict, deleteMode)
+      const verdict = await evaluateTweet(id, username, tweetText, bannedWords, openRouterKey);
+      if (verdict.shouldDelete == true)
+      {
+        handleTweet(id, verdict, deleteMode)
+      }
     }
+    seenTweets.push(id);
+
+
   }
 
   return tweets;
@@ -97,11 +97,9 @@ function handleTweet(tweetId, verdict, deleteMode) {
 // Listen for messages from popup
 browser.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
   if (msg.type === "SCRAPE_TWEETS") {
-    const { bannedWords = [], deleteMode = false, openRouterKey } = msg.payload || {};
-    console.log("bannedwords", bannedWords, openRouterKey)
-    const data = await scrapeTweets(bannedWords, deleteMode, openRouterKey); // pass bannedWords and deleteMode
-
-    sendResponse({ tweets: data }); // sendResponse instead of return
-    return {tweets: data}; // keep channel open for async sendResponse
+    autoScrapeInterval = setInterval(async () => {
+      const { bannedWords = [], deleteMode = false, openRouterKey } = msg.payload || {};
+      await scrapeTweets(bannedWords, deleteMode, openRouterKey); // pass bannedWords and deleteMode
+    }, 5000) //yes this is not the right way to do this, no I don't care
   }
 });

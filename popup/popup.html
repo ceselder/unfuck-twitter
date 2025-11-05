@@ -13,11 +13,7 @@
 <body>
   <h3>Twitter Scraper</h3>
 
-  <label>
-    Openrouter API key:
-    <input type="text" id="openRouterKey" placeholder="" />
-  </label>
-
+  <p>Don't forget to set your openrouter key in the settings!</p>
   <label>
     categories of things you do not want to see (unix pipe-separated) (|):
     <input type="text" id="bannedWordsInput" placeholder="Simple ragebait | Nazi speech" />
@@ -28,8 +24,7 @@
     Delete tweets from page instead of just labeling
   </label>
 
-  <button id="scrapeBtn">Scrape Tweets</button>
-  <pre id="output">Press "Scrape Tweets" to begin.</pre>
+  <button id="scrapeBtn">Start</button>
 
   <script src="popup.js"></script>
 </body>

@@ -6,7 +6,7 @@ async function openRouterQuery(openRouterKey, textPrompt, model) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${openRouterKey}`,
+      Authorization: `Bearer ${openRouterKey.openRouterKey}`, //idk why i implemented it like this but idc anymore
     },
     body: JSON.stringify({
       model: model,
@@ -21,9 +21,7 @@ async function openRouterQuery(openRouterKey, textPrompt, model) {
 browser.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg?.type === "OPENROUTER_QUERY") {
     const { openRouterKey, textPrompt, model } = msg.payload;
-    console.log("credentials:")
-    console.log({ openRouterKey, textPrompt, model })
-    
+
     openRouterQuery(openRouterKey, textPrompt, model)
       .then(data => sendResponse({ ok: true, data }))
       .catch(err => sendResponse({ ok: false, error: err.message }));

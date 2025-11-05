@@ -11,8 +11,6 @@ async function getActiveTab() {
 }
 
 button.addEventListener("click", async () => {
-  console.log("resp")
-  output.textContent = "Scraping...";
 
   const bannedWords = bannedWordsInput.value
     .split("|")
@@ -20,7 +18,8 @@ button.addEventListener("click", async () => {
     .filter(Boolean);
 
   const deleteMode = deleteModeCheckbox.checked;
-  const openRouterKey = openRouterKeyInput.value;
+  const openRouterKey = await browser.storage.local.get("openRouterKey");
+  console.log(openRouterKey)
 
   const tab = await getActiveTab();
   const response = await browser.tabs.sendMessage(tab.id, {
